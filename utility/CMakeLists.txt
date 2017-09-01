@@ -196,6 +196,7 @@ add_library(quickstep_utility_PtrMap ../empty_src.cpp PtrMap.hpp)
 add_library(quickstep_utility_PtrVector ../empty_src.cpp PtrVector.hpp)
 add_library(quickstep_utility_ScopedBuffer ../empty_src.cpp ScopedBuffer.hpp)
 add_library(quickstep_utility_ScopedDeleter ../empty_src.cpp ScopedDeleter.hpp)
+add_library(quickstep_utility_ScopedReassignment ../empty_src.cpp ScopedReassignment.hpp)
 add_library(quickstep_utility_ShardedLockManager ../empty_src.cpp ShardedLockManager.hpp)
 add_library(quickstep_utility_SortConfiguration SortConfiguration.cpp SortConfiguration.hpp)
 add_library(quickstep_utility_SortConfiguration_proto
@@ -312,6 +313,8 @@ target_link_libraries(quickstep_utility_ScopedBuffer
                       quickstep_utility_Alignment
                       quickstep_utility_Macros)
 target_link_libraries(quickstep_utility_ScopedDeleter
+                      quickstep_utility_Macros)
+target_link_libraries(quickstep_utility_ScopedReassignment
                       quickstep_utility_Macros)
 target_link_libraries(quickstep_utility_SqlError
                       glog)
@@ -461,6 +464,14 @@ target_link_libraries(ScopedDeleter_unittest
                       quickstep_utility_ScopedDeleter
                       ${LIBS})
 add_test(ScopedDeleter_unittest ScopedDeleter_unittest)
+
+add_executable(ScopedReassignment_unittest "${CMAKE_CURRENT_SOURCE_DIR}/tests/ScopedReassignment_unittest.cpp")
+target_link_libraries(ScopedReassignment_unittest
+                      gtest
+                      gtest_main
+                      quickstep_utility_ScopedReassignment
+                      ${LIBS})
+add_test(ScopedReassignment_unittest ScopedReassignment_unittest)
 
 add_executable(SqlError_unittest "${CMAKE_CURRENT_SOURCE_DIR}/tests/SqlError_unittest.cpp")
 target_link_libraries(SqlError_unittest
