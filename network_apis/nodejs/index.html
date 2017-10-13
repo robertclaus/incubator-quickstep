@@ -1,0 +1,135 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      $().ready(function(){
+        $('#sendTableQuery').click(function(){
+          $.get('genericTableQuery',{'queryString':$('#queryText').val()},function(data){
+            console.log(data);
+
+            if(data.error.indexOf("ERROR")!=-1)
+            {
+              $('#error').val(data.error);
+              $("#error").show();
+              $('#result').hide();
+              $('#datatable').hide();
+            }
+            else {
+              $('#datatable').empty();
+              //Column Headers
+              var tableRow =$("<tr></tr>");
+              $("#datatable").append(tableRow);
+              for (var name in data.result[0])
+              {
+                if(data.result[0].hasOwnProperty(name))
+                {
+                  var col=$("<th></th>").text(name);
+                  tableRow.append(col);
+                }
+              }
+
+              for(var rowIndex in data.result)
+              {
+                var row=data.result[rowIndex];
+                tableRow =$("<tr></tr>");
+                $("#datatable").append(tableRow);
+                for (var column in row)
+                {
+                  console.log(row);
+                  if(row.hasOwnProperty(column))
+                  {
+                    var col=$("<td></td>").text(row[column]);
+                    tableRow.append(col);
+                  }
+                }
+              }
+
+              $('#error').hide();
+              $('#result').hide();
+              $('#datatable').show();
+            }
+
+          });
+        });
+
+        $('#sendFreeTextQuery').click(function(){
+          $.get('genericQuery',{'queryString':$('#queryText').val()},function(data){
+            console.log(data);
+            if(data.error.indexOf("ERROR")!=-1)
+            {
+              $('#error').text(data.error);
+              $('#error').show();
+              $('#result').hide();
+              $('#datatable').hide();
+            }
+            else {
+              $('#error').hide();
+              $('#result').text(data.result);
+              $('#result').show();
+              $('#datatable').hide();
+            }
+          });
+        });
+
+      });
+    </script>
+    <style>
+      #datatable {
+          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+      }
+
+      #datatable td, #datatable th {
+          border: 1px solid #ddd;
+          padding: 8px;
+      }
+
+      #datatable tr:nth-child(even){background-color: #f2f2f2;}
+
+      #datatable tr:hover {background-color: #ddd;}
+
+      #datatable th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #4CAF50;
+          color: white;
+      }
+
+      #queryText {
+        width: 40em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Quickstep Web Query Interface</h1>
+    <h4>SQL Query:</h4>
+    <textarea id='queryText' placeholder='SELECT * FROM Table;'></textarea>
+    <button id='sendFreeTextQuery'>Query Free-Text Response</button>
+    <button id='sendTableQuery'>Query As Table</button>
+
+
+    <br/><br/>
+    <h4>Query Results:</h4>
+
+    <pre id="error"><h5>Run query first.</h5></pre>
+    <pre id="result"></pre>
+    <table id="datatable" style="display:none;">
+      <tr>
+        <th>Column1</th>
+        <th>Column2</th>
+      </tr>
+      <tr>
+        <td>Row1C1</td>
+        <td>Row1C2</td>
+      </tr>
+      <tr>
+        <td>Row2C1</td>
+        <td>Row2C2</td>
+      </tr>
+    </table>
+
+
+  </body>
+</html>
