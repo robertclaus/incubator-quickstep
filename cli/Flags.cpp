@@ -39,6 +39,9 @@ DEFINE_bool(print_query, false,
 DEFINE_bool(display_timing, true,
             "Whether to display execution time of each statement.");
 
+DEFINE_bool(display_relation_size,true,
+			"Whether to display relation size of each statement.");
+
 DEFINE_bool(initialize_db, false, "If true, initialize a database.");
 
 static bool ValidateNumWorkers(const char *flagname, int value) {

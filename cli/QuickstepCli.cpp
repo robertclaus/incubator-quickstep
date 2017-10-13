@@ -151,6 +151,7 @@ DEFINE_string(mode, "local",
               "via an rpc interface. SQL queries will be accepted and processed in the "
               "same manner as with the local cli.");
 
+
 DECLARE_bool(profile_and_report_workorder_perf);
 DECLARE_bool(visualize_execution_dag);
 
@@ -391,10 +392,13 @@ int main(int argc, char* argv[]) {
             PrintToScreen::PrintRelation(*query_result_relation,
                                          &storage_manager,
                                          io_handle->out());
-            PrintToScreen::PrintOutputSize(
-                *query_result_relation,
-                &storage_manager,
-                io_handle->err());
+
+            if (quickstep::FLAGS_display_relation_size) {
+				PrintToScreen::PrintOutputSize(
+					*query_result_relation,
+					&storage_manager,
+					io_handle->err());
+            }
 
             DropRelation::Drop(*query_result_relation,
                                query_processor->getDefaultDatabase(),
